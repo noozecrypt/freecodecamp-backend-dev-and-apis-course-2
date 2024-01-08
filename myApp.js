@@ -1,5 +1,6 @@
 let express = require("express");
 let app = express();
+let bodyParser = require("body-parser");
 
 console.log("Hello World");
 
@@ -32,10 +33,12 @@ app.get(
 
 app.get("/:word/echo", (req, res) => res.send({ echo: req.params.word }));
 
+app.use("/name", bodyParser.urlencoded({ extended: false }));
+app.use("/name", bodyParser.json());
+
 app
   .route("/name")
-  .get((req, res) =>
-    res.send({ name: req.query.first + " " + req.query.last }),
-  );
+  .get((req, res) => res.send({ name: req.query.first + " " + req.query.last }))
+  .post((req, res) => res.send(req.body));
 
 module.exports = app;
